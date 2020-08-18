@@ -1,0 +1,267 @@
+{% extends "basePage.html" %}
+
+{% block content%}
+
+<style>
+
+.header {
+  font-weight: bold;
+}
+
+</style>
+
+
+<div class="container">
+
+  <div navbar>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <a class="navbar-brand" href="#">NittanyPath</a>
+    
+      <ul class="navbar-nav">
+
+        <li class="nav-item">
+          <a class="nav-link" href="/profile?email={{ email }}">User Information</a>
+        </li>
+
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Enrolled Classes</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/forums?email={{ email }}">Class Forums</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/">Log Out</a>
+        </li>
+
+      </ul>
+    </nav>
+  </div>
+
+  <div class="userContent">
+    <h1 style="margin-left:25px; padding-bottom: 10px">{{ name }}'s Classes</h1>
+    <div class="container-fluid">
+        <div class="row">
+          <div class="col">
+            <h5>Course ID</h5> 
+          </div>
+          <div class="col">
+            <h5>Course Name</h5> 
+          </div>
+          <div class="col">
+            <h5>Section</h5> 
+          </div>          
+          <div class="col">
+            <h5>Description</h5> 
+          </div>
+          <div class="col">
+            <h5>Late Drop Deadline</h5> 
+          </div>          
+        </div>
+
+        {% for class in zippedInformation %}
+
+        <div class="row" style="padding:10px 0px">
+          <div class="col">
+            <h5 href="#" title="Professor Info" data-toggle="popover" data-placement="left" data-trigger="hover" data-content= "{{ class[0].name }}
+            {{ class[0].email }} 
+            {{ class[0].office_address }}">{{ class[0].course_id }}</h5>
+          </div>
+
+          <div class="col">
+            <h5>{{ class[0].course_name }}</h5> 
+          </div>
+          <div class="col">
+            <h5>{{ class[0].sec_no }}</h5> 
+          </div>          
+          <div class="col">
+            <h5>{{ class[0].course_description }}</h5> 
+          </div>
+          <div class="col">
+            <h5>{{ class[0].late_drop_deadline }}</h5> 
+          </div>          
+        </div>
+
+          <div class="container-fluid" style="padding-left: 390px">
+            <div class="header">
+              <div class="row">
+                <div class="col">
+                  <p>Homework No.</p> 
+                </div>
+                <div class="col">
+                  <p>Description</p> 
+                </div>
+                <div class="col">
+                  <p>Grade</p> 
+                </div>              
+              </div>     
+            </div>
+
+            {% for homework in class[1] %}
+
+            <div class="row">
+              <div class="col">
+                <p>{{ homework.hw_no }}</p> 
+              </div>
+              <div class="col">
+                <p>{{ homework.hw_details }}</p> 
+              </div>          
+              <div class="col">
+                <p>{{ homework.grade }}</p> 
+              </div> 
+            </div>      
+
+            {% endfor %}
+
+          </div>
+
+
+          <div class="container-fluid" style="padding-left: 390px">
+            <div class="header">  
+              <div class="row">
+                <div class="col">
+                  <p>Exam No.</p> 
+                </div>
+                <div class="col">
+                  <p>Description</p> 
+                </div>
+                <div class="col">
+                  <p>Grade</p> 
+                </div>                   
+              </div>
+            </div>
+
+            {% for exam in class[2] %}
+
+            <div class="row">
+              <div class="col">
+                <p>{{ exam.exam_no }}</p> 
+              </div>
+              <div class="col">
+                <p>{{ exam.exam_details }}</p> 
+              </div>          
+              <div class="col">
+                <p>{{ exam.grade }}</p> 
+              </div> 
+            </div>      
+
+            {% endfor %}
+
+          </div>
+
+
+        {% endfor %}
+        
+        <script>
+          $(document).ready(function(){
+          $('[data-toggle="popover"]').popover();   
+          });
+        </script>
+
+    </div>
+
+    <h5 style="margin-left:25px; padding-top: 10px">Hover over a Course ID for information about the Professor</h5>
+
+
+
+    {% if zippedInformation %}
+
+
+      <hr style="border-width:5px; margin:30px">
+
+      <div class="dropCourse" style="padding-bottom: 10px">
+        <h1 style="margin-left:25px;padding-top: 20px">Drop a Course</h1>
+        
+        <form action="/enrolled?email={{ email }}" method="POST">
+        <input type="hidden" name="mode" value="dropCourse"/>
+
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-sm-2">
+              <select name="course_selection" class="custom-select" required>
+                <option value="">Select One</option>
+                {% for class in zippedInformation %}  
+                  <option value="{{ class[0].course_id }}">{{ class[0].course_id }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            <div class="col-sm-1">
+              <div align="right">
+                <button type="submit" class="btn btn-secondary">Drop</button>
+              </div>
+            </div>
+        </div>
+        </div>  
+        </form>
+      </div>
+
+      {% if dropped == -1 %}
+        <h5 style="color:#8B0000; padding-left: 18px">Past Drop Deadline: Cannot drop</h5>
+      {% elif dropped == 1 %}
+        <h5 style="color:#006400; padding-left: 18px">Course was dropped successfully</h6>
+      {% endif %}
+    {% endif %}
+
+
+
+    {% if usertype == "1" %}
+
+    <hr style="border-width:5px; margin:30px">
+
+
+    <h1 style="margin-left:25px; padding-bottom: 10px">Classes TA'ing</h1>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col">
+          <h5>Course ID</h5> 
+        </div>
+        <div class="col">
+          <h5>Section</h5> 
+        </div>
+        <div class="col">
+          <h5>Professor Email</h5> 
+        </div>          
+        <div class="col">
+          <h5>Professor Name</h5> 
+        </div>
+        <div class="col">
+          <h5>Office</h5> 
+        </div>          
+      </div>
+
+      {% for class in TACourseList %}
+
+      <div class="row" style="padding:10px 0px">
+        <div class="col">
+          <h5>{{ class.course_id }}</h5>
+        </div>
+        <div class="col">
+          <h5>{{ class.sec_no }}</h5> 
+        </div>
+        <div class="col">
+          <h5>{{ class.email }}</h5> 
+        </div>          
+        <div class="col">
+          <h5>{{ class.name }}</h5> 
+        </div>
+        <div class="col">
+          <h5>{{ class.office_address }}</h5> 
+        </div>          
+      </div>
+
+      {% endfor %}
+
+    </div>
+
+    {% endif %}
+
+  </div>
+</div>
+
+{% endblock %}
+
+
+
+

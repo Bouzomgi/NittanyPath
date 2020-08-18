@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>NittanyPath</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <style>
+
+    .header {
+      text-align:center;
+      font-family: markerfelt;
+      padding-top: 30px;
+      font-size: 270%;
+    }
+    .container {
+      background-color: white;
+      margin-top: 40px;
+      margin-bottom: 40px;
+      padding-bottom: 30px;
+      max-width: 50%;
+    }
+
+    .form-group {
+      margin-top: 30px;
+      margin-bottom: 40px;
+      padding-left: 80px;
+      padding-right: 80px;
+    }
+
+    .login-button {
+      text-align:center;
+      padding-left: 80px;
+      padding-right: 80px;
+      padding-bottom: 20px;
+      font-size: 30px;
+    }
+
+    .error_message {
+      text-align:center;
+      font-family: markerfelt;
+      font-size: 22px;
+    }
+
+    body {
+      background: rgb(32,64,81);
+    background: linear-gradient(90deg, rgba(32,64,81,1) 0%, rgba(59,105,120,1) 55%, rgba(132,169,172,1) 81%, rgba(202,232,213,1) 100%);
+    }
+
+    </style>
+
+  </head>
+  <body>
+
+    <div class="container">
+
+      <div class="header">
+        <b>NITTANYPATH</b>
+      </div>
+
+      <form method="POST">
+        <div class="form-group form-group-lg">
+          <input type="email" class="form-control" name="email" placeholder="University Email" id="email">
+        </div>
+        <div class="form-group form-group-lg">
+          <input type="password" class="form-control" name="pwd" placeholder="Password" id="pwd">
+        </div>
+        <div class="login-button">
+          <button type="submit" class="btn btn-default btn-lg btn-block">Login</button>
+        </div>
+      </form>
+
+      {% if error %}
+      <div class="error_message">
+        Invalid email and password
+      </div>
+      {% endif %}
+
+    </div>
+
+
+  </body>
+</html>
+
+

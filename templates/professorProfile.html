@@ -1,0 +1,24 @@
+{% extends "baseProfile.html" %}
+
+{% block navbar %}
+
+  <li class="nav-item">
+    <a class="nav-link" href="/manageAssignments?email={{ userinfo.email }}">Manage Assignments</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="/gradeAssignments?email={{ userinfo.email }}">Submit Scores</a>
+  </li>
+
+{% endblock %}
+
+<!-- Professor: email, age, gender, office address, department, title -->
+
+{% block leftcol %}
+  <h5 class="content">Office Address: {{ userinfo.office_address }}</h5>
+{% endblock %}
+
+{% block rightcol %}
+  <h5 class="content">Department: {{ userinfo.department }}</h5>
+  <h5 class="content">Gender: {{ userinfo.gender }}</h5>
+  <h5 class="content">Title: {{ userinfo.title }}</h5>
+{% endblock %}

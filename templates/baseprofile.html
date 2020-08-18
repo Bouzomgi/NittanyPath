@@ -1,0 +1,159 @@
+
+{% extends "basePage.html" %}
+
+{% block content%}
+<div class="container">
+
+  <div navbar>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <a class="navbar-brand" href="#">NittanyPath</a>
+    
+      <ul class="navbar-nav">
+
+        <li class="nav-item active">
+          <a class="nav-link" href="#">User Information</a>
+        </li>
+
+        {% block navbar %}{% endblock %}
+
+        <li class="nav-item">
+          <a class="nav-link" href="/forums?email={{ userinfo.email }}">Class Forums</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/">Log Out</a>
+        </li>
+
+      </ul>
+
+    </nav>
+
+  </div>
+  
+  <div class="userContent">
+    <h1 style="margin-left:25px">Welcome, {{ userinfo.name }}!</h1>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-4">
+          <img src="{{ url_for('static', filename=avatar)}}" alt="avatar" style="padding:10px">
+        </div>
+        <!-- Student/TA: email, age, gender, major, street, zipcode, phone -->
+        <!-- Professor: email, age, gender, office address, department, title -->
+        <div class="col-sm-4" style="padding-top:50px">
+          
+          <h5 class="content">Email: {{ userinfo.email }}</h5>
+          <h5 class="content">Age: {{ userinfo.age }}</h5>
+
+          {% block leftcol %}{% endblock %}
+
+          <button type="button" class="btn btn-primary btn-secondary" data-toggle="modal" data-target="#pwdModal" style="margin-top:10px">Change Password</button>
+          {% if error == "passwordSuccess" %}
+          <p style="margin-top: 10px; color: green">Password Successfully Changed</p>
+          {% endif %}
+
+          {% if error == "curPasswordIncorrect" %}
+          <p style="margin-top: 10px; color: red">Incorrect Current Password</p>
+          {% endif %}
+        
+        </div>
+        <div class="col-sm-4" style="padding-top:50px">
+          
+          {% block rightcol %}{% endblock %}
+
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+<!-- Modal -->
+  <div class="modal fade" tabindex="-1" role="dialog" id="pwdModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Change Password</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <form action="/profile" method="POST" class="needs-validation" novalidate>
+          <div class="modal-body">
+            <div class="form-group">
+              <input type="hidden" name="type" value="pwdchange"/>
+              <input type="hidden" name="userinfo" value="{{ userinfo }}"/>
+              <input type="hidden" name="usertype" value="{{ usertype }}"/>
+              <input type="hidden" name="avatar" value="{{ avatar }}"/>
+
+              <input name="currentpassword" type="password" class="form-control" id="pwd" placeholder="Current Password" required>
+              <input name="newpassword" type="password" class="form-control" id="pwd" placeholder="New Password" style="margin:10px 0px" required>
+              <input name="newpasswordconfirm" type="password" class="form-control" id="pwd" placeholder="Confirm New Password" required>
+              <p style="margin: 10px 0px -20px 4px" id="response"></p>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-primary">Save changes</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </form>
+
+        <script>
+        // Disable form submissions if there are invalid fields
+        (function() {
+          'use strict';
+          window.addEventListener('load', function() {
+            // Get the forms we want to add validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+              form.addEventListener('submit', function(event) {
+              
+              
+            var oldpwd= document.getElementsByName("currentpassword")[0].value;
+            var newpwd= document.getElementsByName("newpassword")[0].value;
+            var confirmpwd= document.getElementsByName("newpasswordconfirm")[0].value;
+            var response = '';
+            var error = false;
+            var resultString = '';
+
+            resultString = oldpwd.match(/^[a-z0-9]+$/i);
+            if (resultString != oldpwd) {
+              response = "Invalid input. Password must be alphanumeric.";
+                error = true;
+            }
+            resultString = newpwd.match(/^[a-z0-9]+$/i);
+            if (resultString != newpwd) {
+              response = "Invalid input. Password must be alphanumeric.";
+              error = true;
+            }
+            if (newpwd != confirmpwd) {
+              response = "New passwords are not the same";
+                error = true;
+            }
+            if ((oldpwd === '') || (newpwd === '') || (confirmpwd === '')) {
+            response = "Please fill in all fields";
+                error = true;
+            }
+            document.getElementById("response").innerHTML = response;
+            
+                if ((form.checkValidity() === false) || (error)) {
+                  event.preventDefault();
+                  event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+              }, false);
+            });
+          }, false);
+        })();
+        </script>
+
+
+      </div>
+    </div>
+  </div>
+
+
+</div>
+{% endblock %}
+

@@ -1,0 +1,280 @@
+{% extends "basePage.html" %}
+
+{% block content%}
+
+<div class="container">
+
+  <div navbar>
+    <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+      <a class="navbar-brand" href="#">NittanyPath</a>
+    
+      <ul class="navbar-nav">
+
+        <li class="nav-item">
+          <a class="nav-link" href="/profile?email={{ email }}">User Information</a>
+        </li>
+
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Manage Assignments</a>
+        </li> 
+
+        <li class="nav-item">
+          <a class="nav-link" href="/gradeAssignments?email={{ email }}">Submit Scores</a>
+        </li>        
+
+        <li class="nav-item">
+          <a class="nav-link" href="/forums?email={{ email }}">Class Forums</a>
+        </li>
+
+        <li class="nav-item">
+          <a class="nav-link" href="/">Log Out</a>
+        </li>
+
+      </ul>
+    </nav>
+  </div>
+
+  <div class="userContent">
+
+    <h1 style="margin-left:25px; padding-bottom: 10px">Course Assignments</h1>
+      <div class="container-fluid" style="padding-bottom: 30px">
+        <div class="row">
+          <div class="col">
+            <h5>Course ID</h5> 
+          </div>
+          <div class="col">
+            <h5>Section no.</h5> 
+          </div>
+          <div class="col">
+            <h5>Assignment no.</h5> 
+          </div>          
+          <div class="col">
+            <h5>Assignment Description</h5> 
+          </div>        
+        </div>
+
+        {% for info in reducedTable %}
+
+        <div class="row" style="padding: 12px 0px">
+
+          <div class="col">
+            <h5>{{ info.course_id }}</h5> 
+          </div>
+          <div class="col">
+            <h5>{{ info.sec_no }}</h5> 
+          </div>
+
+          {% if info.type == 'hw' %}
+          <div class="col">
+            <h5>Homework {{ info.assignment_no }}</h5> 
+          </div>
+          {% else %}
+          <div class="col">
+            <h5>Exam {{ info.assignment_no }}</h5> 
+          </div>
+          {% endif %}
+
+          <div class="col">
+            <h5>{{ info.assignment_details }}</h5> 
+          </div>          
+        </div>
+
+        {% endfor %}
+
+      </div>
+
+
+
+    <div class="createAssignment">
+      <h1 style="margin-left:25px; padding-bottom: 10px">Create an Assignment</h1>
+      
+      <div class="container-fluid">
+
+        <div class="row">
+          <div class="col">
+            <h5>Course</h5> 
+          </div>
+          <div class="col">
+            <h5>Section</h5> 
+          </div>
+          <div class="col">
+            <h5>Assignment Type</h5> 
+          </div>          
+          <div class="col-sm-5">
+            <h5>Assignment Details</h5> 
+          </div>  
+        </div>
+
+      </div>
+
+      <div class="container-fluid">
+       
+        <form action="/manageAssignments?email={{ email }}" method="POST">
+
+          <input type="hidden" name="mode" value="create"/>
+
+          <div class="row">
+
+            <div class="col">
+              
+              <select name="course_id" class="custom-select" required>
+                <option value="">Select One</option>
+
+                {% for course in courseSectionsDict.keys() %}
+                <option value="{{ course }}">{{ course }}</option>
+                {% endfor %}
+
+              </select>
+            </div>
+
+            <div class="col">
+
+              <select name="sec_no" class="custom-select" required>
+                <option value="">Select One</option>
+                {% for sectionList in courseSectionsDict.values() %}
+                  {% for section in sectionList %}
+                  <option value="{{ section }}">{{ section }}</option>
+                  {% endfor %}
+                {% endfor %}
+              </select>
+
+            </div>
+                    
+            <div class="col">
+              <select name="assignmentType" class="custom-select" required>
+                <option value="">Select One</option>
+                <option value="hw">Homework</option>
+                <option value="exam">Exam</option>
+              </select>
+
+            </div>          
+            <div class="col-sm-5">
+              <div class="md-form" required>
+                <textarea name = description id="form7" class="md-textarea form-control" rows="3"></textarea>
+              </div>
+            </div>  
+          </div>
+        
+          <div align="right">
+            <button type="submit" class="btn btn-secondary" style="margin-top: 10px">Submit</button>
+          </div>
+        </form>
+      </div>
+      {% if createQuery.assignmentType == 'hw' %}
+        {% set activeDict = simpleHW %}
+      {% elif createQuery.assignmentType == 'exam' %}
+        {% set activeDict = simpleExam %}
+      {% endif %}
+
+      {% if (createQuery) and not ((createQuery.course_id, (createQuery.sec_no)|int) in activeDict.keys()) %}
+
+        <div align="center">
+          <h5 style="color:#8B0000">Invalid Selection</h5>
+        </div>
+
+      {% endif %}
+
+    </div>
+
+
+    <div class="deleteAssignment">
+      <h1 style="margin-left:25px;">Delete an Assignment</h1>
+      
+      <div class="container-fluid">
+
+        <div class="row">
+          <div class="col">
+            <h5>Course</h5> 
+          </div>
+          <div class="col">
+            <h5>Section</h5> 
+          </div>
+          <div class="col">
+            <h5>Assignment Type</h5> 
+          </div>          
+          <div class="col">
+            <h5>Assignment no.</h5> 
+          </div>  
+        </div>
+
+      </div>
+
+      <div class="container-fluid">
+        <form action="/manageAssignments?email={{ email }}" method="POST">
+
+        <input type="hidden" name="mode" value="delete"/>
+
+        <div class="row">
+
+          <div class="col">
+            
+            <select name="course_id" class="custom-select" required>
+              <option value="">Select One</option>
+
+              {% for course in courseSectionsDict.keys() %}
+              <option value="{{ course }}">{{ course }}</option>
+              {% endfor %}
+
+            </select>
+          </div>
+
+          <div class="col">
+
+            <select name="sec_no" class="custom-select" required>
+              <option value="">Select One</option>
+              {% for sectionList in courseSectionsDict.values() %}
+                {% for section in sectionList %}
+                <option value="{{ section }}">{{ section }}</option>
+                {% endfor %}
+              {% endfor %}
+            </select>
+
+          </div>
+                  
+          <div class="col">
+            <select name="assignmentType" class="custom-select" required>
+              <option value="">Select One</option>
+              <option value="hw">Homework</option>
+              <option value="exam">Exam</option>
+            </select>
+
+          </div>          
+          <div class="col">
+            <select name="assignment_no" class="custom-select" required>
+              <option value="">Select One</option>
+                {% for assignment_no in reducedAssignmentList %}
+                  <option value="{{ assignment_no }}">{{ assignment_no }}</option>
+                {% endfor %}
+            </select>
+          </div>  
+        </div>
+      
+        <div align="right">
+          <button type="submit" class="btn btn-secondary" style="margin-top: 10px">Submit</button>
+        </div>
+        </form>
+
+        {% if deleteQuery.assignmentType == 'hw' %}
+          {% set activeDict = simpleHW %}
+        {% elif deleteQuery.assignmentType == 'exam' %}
+          {% set activeDict = simpleExam %}
+        {% endif %}
+
+        {% if deleteQuery %}
+          {% if not ((deleteQuery.course_id, (deleteQuery.sec_no)|int) in activeDict.keys()) 
+          or not ((deleteQuery.assignment_no)|int in activeDict[deleteQuery.course_id, deleteQuery.sec_no|int]) %}
+
+          <div align="center">
+            <h5 style="color:#8B0000">Invalid Selection</h5>
+          </div>
+
+          {% endif %}
+        {% endif %}
+
+      </div>
+
+  </div>
+</div>
+
+{% endblock %}
+

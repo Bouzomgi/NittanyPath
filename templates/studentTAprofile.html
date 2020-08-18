@@ -1,0 +1,23 @@
+{% extends "baseProfile.html" %}
+
+{% block navbar %}
+
+  <li class="nav-item">
+    <a class="nav-link" href="/enrolled?email={{ userinfo.email }}">Enrolled Classes</a>
+  </li>
+
+{% endblock %}
+
+<!-- Student/TA: email, age, gender, major, street, zipcode, phone -->
+
+{% block leftcol %}
+  <h5 class="content">Street: {{ userinfo.street }}</h5>
+{% endblock %}
+
+{% block rightcol %}
+  <h5 class="content">Major: {{ userinfo.major }}</h5>
+  <h5 class="content">Gender: {{ userinfo.gender }}</h5>
+  <h5 class="content">Zipcode: {{ userinfo.zipcode }}</h5>
+  <h5 class="content">Phone: {{ userinfo.phone }}</h5>
+{% endblock %}
+
