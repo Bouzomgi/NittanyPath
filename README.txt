@@ -1,22 +1,10 @@
-
-Brian Ouzomgi
-bao5148@psu.edu
-CMPSC431W
-Section 1
-
 FOR PROGRESS REVIEW
 
-Included in my submission is a Python script that parses and creates my SQLite tables, a Flask script responsible for my website, and 2 HTML documents that make up my starting homepage and personal profile respectively.
+Included is a Python script that parses and creates my SQLite tables, a Flask script responsible for my website, and 2 HTML documents that make up my starting homepage and personal profile respectively.
 
 My Python script responsible for populating the database, dbgen.py, uses Pandas to read the three Excel spreadsheets and the command to_sql to convert them to SQL tables. I manually created createTable commands for the actual schema, and developed insert commands that will take the Excel values and dump the relevant ones into the correct schema categories. 
 
 foreignBust.py is my Flask script. I use homepage.html as my starting page the user sees when they reach the site. I used mobile sign-in pages as inspiration and I tried to make it look nice. If the user inputs a valid username and password (which is blocked out per the requirements request -I used Bootstrap for that), they are led to the profile.html page, which simply greets them by name. I pass all user information to the profile.html page other than the password. Otherwise, the site shows a message stating the username and password were incorrect.
-
-FOR FINAL SUBMISSION
-
-Main file: start.py
-
-I spent a LOT of time on this project. A LOT. Like I didn't sleep until 3AM for many days of the week that I did the majority of this project. I started building pretty much all of the website right after the progress review was due and I really wanted to build something I was proud of. I had 0 web development experience before this class (HTML, Flask, JS, none of it), and so the whole process took a lot of Googling. However, I learned a ton and love how this website looks, runs, and is organized. Let's review it...
 
 TOOLS
 
@@ -81,9 +69,6 @@ OTHER FILES
 
 Again, to keep proper organization I used two additional Python files: one for my SQL commands called SQLtool.py and one for random auxiliary functions called aux.py. They are both imported into my main start.py Flask file.
  
-WRAP-UP
-
-I didn't include any specific EC options, but hopefully you see the extra effort I put into perfecting the required functionality (especially that Submit Scores page). 
 
 
 
